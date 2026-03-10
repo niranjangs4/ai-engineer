@@ -1,0 +1,6 @@
+pip install requests
+pip install chromadb
+pip install sentence-transformers
+pip install rich
+pip install fastapi
+pip install uvicorn
