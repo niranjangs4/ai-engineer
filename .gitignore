@@ -9,8 +9,8 @@ __pycache__/
 # ----------------------
 # Virtual environments
 # ----------------------
-venv/
 ai_env/
+venv/
 .env/
 
 # ----------------------
