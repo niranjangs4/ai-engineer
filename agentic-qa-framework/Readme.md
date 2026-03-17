@@ -51,17 +51,37 @@ This system:
 ## 🔷 High-Level Flow
 
 ```text
-User Goal
-   ↓
-Planner (LLM)
-   ↓
-Execution Plan
-   ↓
-ReAct Pipeline (Core Engine)
-   ↓
-Action Executor (Playwright)
-   ↓
-Browser UI
+                ┌──────────────────────┐
+                │       USER GOAL      │
+                └─────────┬────────────┘
+                          ↓
+                ┌──────────────────────┐
+                │     PLANNER (LLM)    │
+                └─────────┬────────────┘
+                          ↓
+                ┌──────────────────────┐
+                │   EXECUTION PLAN     │
+                └─────────┬────────────┘
+                          ↓
+                ┌─────────────────────────────────────┐
+                │      REACT EXECUTION ENGINE         │
+                │                                     │
+                │ THINK → ACT → EXECUTE → OBSERVE     │
+                │                ↺                    │
+                └─────────┬───────────────────────────┘
+                          ↓
+            ┌─────────────┴──────────────┐
+            │                            │
+     SUCCESS PATH                 FAILURE PATH
+            │                            │
+            ↓                            ↓
+   Next Step Execution        Retry → Heal → Analyze
+                                         ↓
+                               ┌──────────────────┐
+                               │   VISION AGENT   │
+                               └────────┬─────────┘
+                                        ↓
+                               Bug Report / Stop
 ```
 
 ---

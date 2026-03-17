@@ -1,306 +1,456 @@
-# Week 8 — Combined Agent (Planner + ReAct)
+# 🚀 Agentic QA Framework
 
-## Goal
-
-Build a **Combined AI Agent** that integrates:
-
-* Planner
-* ReAct reasoning
-* Tool registry
-* Executor
-* Memory
-* Self-reflection
-
-This architecture is similar to how modern agent frameworks operate.
+### Self-Healing AI Test Automation (ReAct + RAG + Vision)
 
 ---
 
-# Why a Combined Agent?
+# 📌 Overview
 
-So far we built different types of agents:
+The **Agentic QA Framework** is an intelligent automation system that transforms traditional test automation into an **AI-driven autonomous agent**.
 
-| Week  | Agent Type    |
-| ----- | ------------- |
-| Week5 | Tool Agent    |
-| Week6 | Planner Agent |
-| Week7 | ReAct Agent   |
+Instead of writing static scripts, this system:
 
-Each solved a different problem.
-
-Now we combine them into **one intelligent system**.
+* Understands goals
+* Plans steps dynamically
+* Executes actions intelligently
+* Learns from past executions
+* Heals failures automatically
 
 ---
 
-# Combined Agent Architecture
+# 🎯 What Problem It Solves
+
+Traditional automation:
+
+* ❌ Breaks when UI changes
+* ❌ Hardcoded selectors
+* ❌ No learning
+* ❌ Manual maintenance
+
+This system:
+
+* ✅ Self-heals selectors
+* ✅ Learns from previous runs (RAG)
+* ✅ Uses reasoning (ReAct loop)
+* ✅ Detects UI errors using Vision AI
+
+---
+
+# 🧠 Core Concepts Used
+
+* **ReAct Pattern** → Reason + Act loop
+* **RAG (Retrieval-Augmented Generation)** → Memory-based learning
+* **Self-Healing Automation** → Fix broken selectors
+* **Vision AI** → Screenshot-based failure analysis
+* **Tool-based Execution** → Modular action system
+
+---
+
+# 🏗️ Architecture Overview
+
+## 🔷 High-Level Flow
 
 ```text
-User Request
-     │
-     ▼
-Planner
-(task decomposition)
-     │
-     ▼
-Step Executor
-     │
-     ▼
-ReAct Reasoning
-     │
-     ▼
-Dynamic Tool Selection
-     │
-     ▼
-Tool Registry
-     │
-     ▼
-Tool Execution
-     │
-     ▼
-Observation
-     │
-     ▼
-Self Reflection
-     │
-     ▼
-Memory Update
-     │
-     ▼
-Final Result
+                ┌──────────────────────┐
+                │       USER GOAL      │
+                └─────────┬────────────┘
+                          ↓
+                ┌──────────────────────┐
+                │     PLANNER (LLM)    │
+                └─────────┬────────────┘
+                          ↓
+                ┌──────────────────────┐
+                │   EXECUTION PLAN     │
+                └─────────┬────────────┘
+                          ↓
+                ┌─────────────────────────────────────┐
+                │      REACT EXECUTION ENGINE         │
+                │                                     │
+                │ THINK → ACT → EXECUTE → OBSERVE     │
+                │                ↺                    │
+                └─────────┬───────────────────────────┘
+                          ↓
+            ┌─────────────┴──────────────┐
+            │                            │
+     SUCCESS PATH                 FAILURE PATH
+            │                            │
+            ↓                            ↓
+   Next Step Execution        Retry → Heal → Analyze
+                                         ↓
+                               ┌──────────────────┐
+                               │   VISION AGENT   │
+                               └────────┬─────────┘
+                                        ↓
+                               Bug Report / Stop
 ```
 
 ---
 
-# Component Overview
+## 🔷 Supporting Systems
 
-## Planner
-
-The planner converts a user request into a list of steps.
-
-Example:
-
-User request:
-
-```
-Automate login feature
-```
-
-Planner output:
-
-```
-Step1 Generate testcases
-Step2 Generate automation
-Step3 Run tests
-Step4 Analyze failures
-Step5 Generate report
+```text
+RAG Memory         → selector learning
+Validator          → prevent invalid actions
+Failure Collector  → logs + screenshots
+Vision Agent       → error detection + bug report
 ```
 
 ---
 
-# ReAct Reasoning
+# 🔁 DETAILED EXECUTION FLOW (VERY IMPORTANT)
 
-Inside each step the agent can reason dynamically.
+## 🧠 Step-by-Step Runtime Flow
 
-ReAct loop:
-
-```
-Thought
-Action
-Observation
-```
-
-Example:
-
-```
-Thought: Need Playwright automation
-Action: generate_automation
-Observation: automation script created
+```text
+START
+  ↓
+User provides GOAL
+  ↓
+Browser opens application
+  ↓
+RAG Memory Search (context)
+  ↓
+Planner generates steps
+  ↓
+FOR EACH STEP:
 ```
 
 ---
 
-# Tool Registry
+## 🔄 ReAct Loop Execution
 
-Tools are stored in a registry.
-
-Example:
-
-```
-generate_testcases
-generate_automation
-run_tests
-analyze_failures
-generate_report
-```
-
-Instead of hardcoding logic, the agent selects tools dynamically.
-
----
-
-# Executor
-
-The executor runs each step created by the planner.
-
-Example:
-
-```
-Step1 → generate_testcases
-Step2 → generate_automation
-Step3 → run_tests
+```text
+STATE: START
+  ↓
+STATE: THOUGHT
+  → Extract DOM
+  → Build semantic DOM
+  → Generate prompt
+  → Call LLM
+  → Get decision (action_type, selector, value)
 ```
 
 ---
 
-# Memory
-
-Memory stores outputs between steps.
-
-Example structure:
-
-```
-memory["testcases"]
-memory["automation"]
-memory["test_results"]
-memory["analysis"]
-```
-
-This allows later steps to reuse earlier results.
-
----
-
-# Self Reflection
-
-The agent reviews its own output and improves results.
-
-Example:
-
-```
-Observation: Test failed
-
-Reflection:
-Selector changed
-
-Action:
-Update automation code
+```text
+STATE: ACTION
+  → Validate LLM output
+  → If invalid → retry (max 2)
 ```
 
 ---
 
-# Example Combined Agent Workflow
+```text
+STATE: EXECUTE
 
-User request:
+  1. Get candidate selectors:
+     - RAG selector
+     - LLM selector
+     - Healed selector
 
-```
-Automate login feature
-```
+  2. Remove empty selectors
 
-Agent workflow:
+  3. Detect repeated actions (avoid loops)
 
-```
-Planner
-↓
-Generate testcases
-↓
-Generate automation
-↓
-Run tests
-↓
-Observe failures
-↓
-Analyze failures
-↓
-Generate report
-```
+  4. Try each selector:
+        → validate
+        → execute
 
-Inside steps the agent can reason dynamically using ReAct.
+  5. If success:
+        → store in history
+        → learn in RAG
 
----
+  6. If failure:
+        → retry (max 2)
 
-# Example Realistic Agent Behavior
-
-```
-User: Automate login feature
-```
-
-Agent:
-
-```
-Step1 Generate testcases
-Step2 Generate automation
-Step3 Run tests
-```
-
-Execution:
-
-```
-Running tests...
-2 failures detected
-```
-
-Reflection:
-
-```
-Locator outdated
-```
-
-Agent fixes automation and reruns tests.
-
----
-
-# Technologies Used
-
-Language:
-
-Python
-
-Local LLM runtime:
-
-Ollama
-
-Libraries:
-
-requests
-
----
-
-# Learning Outcomes
-
-By completing Week 8 you will understand:
-
-```
-Combined agent architecture
-Planner + ReAct integration
-Dynamic tool selection
-Agent memory usage
-Self-reflection workflows
-```
-
-These concepts are foundational for **autonomous AI systems**.
-
----
-
-# Learning Progress
-
-Roadmap so far:
-
-```
-Week1 Python CLI AI
-Week2 Chat assistant
-Week3 Embeddings
-Week4 RAG system
-Week5 Tool agents
-Week6 Planner agents
-Week7 ReAct agents
-Week8 Combined agents
+  7. If still failure:
+        → capture screenshot
+        → run vision analysis
+        → stop if critical error
 ```
 
 ---
 
-# Next Step
-
-Next we will implement:
-
-```
-week8/combined_agent.py
+```text
+STATE: OBSERVE
+  → Capture result
 ```
 
-This will be the **first autonomous multi-capability agent in your project**.
+---
+
+```text
+STATE: EVALUATE
+  → If success → mark step complete
+  → Else → stop step
+```
+
+---
+
+```text
+NEXT STEP → repeat
+  ↓
+END
+```
+
+---
+
+# 🎯 SELECTOR STRATEGY (CORE INNOVATION)
+
+```text
+Priority Order:
+
+1. RAG selector (learned from past)
+2. LLM selector (current decision)
+3. Healed selector (DOM similarity)
+```
+
+---
+
+## 🔧 Self-Healing Logic
+
+```text
+Input selector → compare with DOM text
+   ↓
+Find best match:
+   - exact match
+   - partial match
+   - keyword match
+   ↓
+Return closest working selector
+```
+
+---
+
+# 📚 RAG MEMORY SYSTEM
+
+## What it Stores
+
+```json
+{
+  "action": "click login",
+  "selector": "button:has-text('Sign In')",
+  "confidence": 0.7
+}
+```
+
+---
+
+## How it Works
+
+```text
+Before execution:
+   → search similar actions
+
+After success:
+   → store selector
+   → increase confidence
+
+Future runs:
+   → reuse selector first
+```
+
+---
+
+# 👁 VISION FAILURE ANALYSIS
+
+Triggered when:
+
+* Action fails after retries
+
+---
+
+## Flow:
+
+```text
+Failure detected
+   ↓
+Take screenshot
+   ↓
+Send to Vision Model
+   ↓
+Detect:
+   - error messages
+   - UI issues
+   - blocking problems
+   ↓
+Generate structured bug report
+```
+
+---
+
+# ⚙️ COMPONENT BREAKDOWN
+
+## 🧠 Planner (`golden_prompts.py`)
+
+* Converts goal → steps
+
+---
+
+## 🔁 ReAct Engine (`react_pipeline.py`)
+
+* Core brain of system
+* Handles:
+
+  * reasoning
+  * retries
+  * execution flow
+
+---
+
+## 📚 RAG Memory (`rag_memory.py`)
+
+* Stores selectors
+* Improves stability over time
+
+---
+
+## ⚙️ Executor (`agentic_web_qa.py`)
+
+* Executes Playwright actions
+
+---
+
+## 👁 Vision Agent (`vision_agent.py`)
+
+* Analyzes failure screenshots
+
+---
+
+## 🛡 Validator (`action_validator.py`)
+
+* Prevents invalid actions
+
+---
+
+## 📸 Failure Collector (`failure_collector.py`)
+
+* Captures logs + screenshots
+
+---
+
+# 🔄 CONTROL FLOW SUMMARY
+
+```text
+FOR each step:
+
+THINK
+ → LLM decides action
+
+ACT
+ → validate action
+
+EXECUTE
+ → try selectors (RAG → LLM → heal)
+
+IF success:
+ → store in memory
+
+IF fail:
+ → retry
+
+IF still fail:
+ → vision analysis
+ → stop if critical
+```
+
+---
+
+# 🧠 LEARNING LOOP
+
+```text
+Success
+ ↓
+Store selector
+ ↓
+Increase confidence
+ ↓
+Reuse next time
+```
+
+---
+
+# 🧪 SAMPLE GOAL
+
+```text
+open zodiac application and login and verify dashboard
+```
+
+---
+
+# 🧰 TECH STACK
+
+* Python
+* Playwright
+* Ollama (LLM runtime)
+* Sentence Transformers
+* NumPy
+
+---
+
+# 🤖 MODELS USED
+
+```text
+Planner      → llama3.1
+Executor     → qwen2.5
+Vision       → qwen2.5vl
+Code Gen     → deepseek-coder
+```
+
+---
+
+# ⚠️ LIMITATIONS
+
+* Depends on visible UI text
+* LLM output variability
+* Vision model may misinterpret UI
+* Single-thread execution
+
+---
+
+# 🔮 FUTURE IMPROVEMENTS
+
+* Multi-tab handling
+* API validation
+* Dashboard reporting
+* CI/CD integration
+* Parallel execution
+
+---
+
+# 🎤 HOW TO EXPLAIN IN INTERVIEW (IMPORTANT)
+
+Say this:
+
+```text
+"This framework is an agentic automation system built on the ReAct pattern.
+
+The planner converts a goal into steps.
+The ReAct pipeline executes each step using reasoning.
+
+Selectors are resolved using a 3-level strategy:
+RAG memory, LLM output, and DOM-based healing.
+
+Execution is done via Playwright, and failures are handled using retries,
+logging, and vision-based analysis.
+
+The system continuously learns using RAG, making future executions more stable."
+```
+
+---
+
+# 💡 ONE-LINE SUMMARY
+
+```text
+Traditional Automation → Script-based
+This System → AI Agent-based Automation
+```
+
+---
+
+# 🚀 FINAL NOTE
+
+This is not just a framework.
+
+👉 This is a **Self-Learning Autonomous QA Agent**
+
+---
