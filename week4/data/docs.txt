@@ -1,0 +1,9 @@
+Playwright is a browser automation framework.
+
+Playwright supports Chromium, Firefox and WebKit browsers.
+
+Playwright can automate testing for web applications.
+
+Playwright allows locating elements using CSS selectors, text, and roles.
+
+Playwright provides features like auto waiting and network interception.

@@ -1,0 +1,11 @@
+[
+  {
+    "text": "### Instruction:\nGenerate testcases for login feature\n\n### Response:\nTC1 Valid login\nTC2 Invalid password\nTC3 Empty fields"
+  },
+  {
+    "text": "### Instruction:\nGenerate testcases for checkout feature\n\n### Response:\nTC1 Successful payment\nTC2 Payment declined\nTC3 Empty cart"
+  },
+  {
+    "text": "### Instruction:\nGenerate testcases for password reset\n\n### Response:\nTC1 Valid email\nTC2 Invalid email\nTC3 Expired reset link"
+  }
+]

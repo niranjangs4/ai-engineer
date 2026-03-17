@@ -1,0 +1,43 @@
+Recall our discussion about building an Agentic Website Learning and Autonomous QA framework.
+
+System includes:
+Planner Agent
+ReAct Agent
+Browser Tool Layer
+DOM Summarizer
+Navigation Graph
+Vector Memory
+UI Fingerprinting
+Exploration Engine
+Test Generator
+Self-Healing
+
+Goal:
+AI agent learns website automatically after login and generates automation tests.
+======================================================================
+Project: Agentic Website Learning & Autonomous QA System
+
+Goal:
+Build an AI agent that logs into a web application and automatically learns the entire website.
+
+Features:
+- Planner Agent
+- ReAct Execution Agent
+- Browser Tools (Playwright)
+- DOM Summarizer
+- Interactive Element Detection
+- Navigation Graph Builder
+- Vector Memory (RAG)
+- UI Fingerprinting
+- Exploration Engine (BFS + DFS hybrid)
+- Page State Detection
+- Automatic Test Case Generator
+- Self-Healing Selectors
+
+Agent workflow:
+Login → Crawl menus → Explore pages → Build navigation graph → Store UI fingerprints → Generate test cases → Execute automation.
+
+Architecture:
+Planner → ReAct Agent → Browser Tools → DOM Observer → Memory (Vector DB + Graph) → Exploration Engine → Test Generator.
+
+Goal is to build a real autonomous QA automation agent.

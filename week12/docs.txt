@@ -1,0 +1,5 @@
+Playwright login automation:
+
+Use page.fill() to enter values into input fields.
+Use page.click() to click buttons.
+Use page.locator() to find elements.
